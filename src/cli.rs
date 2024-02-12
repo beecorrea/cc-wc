@@ -26,3 +26,7 @@ pub struct WcMode {
 pub fn get_args() -> WcArgs {
     WcArgs::parse()
 }
+
+pub fn use_all_opts(mode: &WcMode) -> bool {
+    !(mode.characters || mode.lines || mode.words)
+}

@@ -1,4 +1,4 @@
-use crate::cli;
+use crate::cli::{self, use_all_opts};
 use std::{collections::HashMap, fs};
 
 #[derive(Debug)]
@@ -30,17 +30,15 @@ pub fn calc_sizes(cli_args: &cli::WcArgs) -> WcStats {
         words: 0,
     };
 
-    let all_opts = characters || lines || words;
-
-    if all_opts || characters {
+    if use_all_opts(&cli_args.mode) || characters {
         all_sizes.chars = get_size_bytes(&cli_args.file);
     }
 
-    if all_opts || lines {
+    if use_all_opts(&cli_args.mode) || lines {
         all_sizes.lines = get_size_lines(&cli_args.file);
     }
 
-    if all_opts || words {
+    if use_all_opts(&cli_args.mode) || words {
         all_sizes.words = word_count(&cli_args.file) as usize;
     }
     all_sizes
@@ -57,21 +55,21 @@ fn word_count(filename: &str) -> u32 {
         .values()
         .sum()
 }
+
 pub fn build_output_str(stats: &WcStats, mode: &cli::WcMode) -> String {
     let mut output: String = String::new();
-    let all_opts = mode.characters || mode.lines || mode.words;
 
-    if all_opts || mode.characters {
+    if use_all_opts(mode) || mode.characters {
         let formatted = format!("{} ", stats.chars);
         output.push_str(&formatted);
     }
 
-    if all_opts || mode.lines {
+    if use_all_opts(mode) || mode.lines {
         let formatted = format!("{} ", stats.lines);
         output.push_str(&formatted);
     }
 
-    if all_opts || mode.words {
+    if use_all_opts(mode) || mode.words {
         let formatted = format!("{} ", stats.words);
         output.push_str(&formatted);
     }
