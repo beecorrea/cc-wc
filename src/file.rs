@@ -1,6 +1,7 @@
 use crate::cli;
 use std::{collections::HashMap, fs};
 
+#[derive(Debug)]
 pub struct WcStats {
     pub chars: usize,
     pub lines: usize,
@@ -29,18 +30,19 @@ pub fn calc_sizes(cli_args: &cli::WcArgs) -> WcStats {
         words: 0,
     };
 
-    if characters {
+    let all_opts = characters || lines || words;
+
+    if all_opts || characters {
         all_sizes.chars = get_size_bytes(&cli_args.file);
     }
 
-    if lines {
+    if all_opts || lines {
         all_sizes.lines = get_size_lines(&cli_args.file);
     }
 
-    if words {
+    if all_opts || words {
         all_sizes.words = word_count(&cli_args.file) as usize;
     }
-
     all_sizes
 }
 
@@ -57,18 +59,19 @@ fn word_count(filename: &str) -> u32 {
 }
 pub fn build_output_str(stats: &WcStats, mode: &cli::WcMode) -> String {
     let mut output: String = String::new();
+    let all_opts = mode.characters || mode.lines || mode.words;
 
-    if mode.characters {
+    if all_opts || mode.characters {
         let formatted = format!("{} ", stats.chars);
         output.push_str(&formatted);
     }
 
-    if mode.lines {
+    if all_opts || mode.lines {
         let formatted = format!("{} ", stats.lines);
         output.push_str(&formatted);
     }
 
-    if mode.words {
+    if all_opts || mode.words {
         let formatted = format!("{} ", stats.words);
         output.push_str(&formatted);
     }

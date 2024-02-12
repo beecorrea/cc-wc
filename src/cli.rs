@@ -11,7 +11,7 @@ pub struct WcArgs {
 }
 
 #[derive(Args, Debug)]
-#[group(required = true, multiple = true)]
+#[group(required = false, multiple = false)]
 pub struct WcMode {
     #[arg(short)]
     pub characters: bool,
