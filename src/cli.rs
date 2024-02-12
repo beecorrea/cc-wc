@@ -18,6 +18,9 @@ pub struct WcMode {
 
     #[arg(short)]
     pub lines: bool,
+
+    #[arg(short)]
+    pub words: bool,
 }
 
 pub fn get_args() -> WcArgs {
