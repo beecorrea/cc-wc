@@ -1,3 +1,4 @@
+use clap::Args;
 use clap::Parser;
 
 #[derive(Parser, Debug)]
@@ -5,8 +6,18 @@ use clap::Parser;
 pub struct WcArgs {
     pub file: String,
 
-    #[arg(short, long)]
+    #[command(flatten)]
+    pub mode: WcMode,
+}
+
+#[derive(Args, Debug)]
+#[group(required = true, multiple = true)]
+pub struct WcMode {
+    #[arg(short)]
     pub characters: bool,
+
+    #[arg(short)]
+    pub lines: bool,
 }
 
 pub fn get_args() -> WcArgs {
